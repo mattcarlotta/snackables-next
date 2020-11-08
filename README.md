@@ -11,7 +11,7 @@
     <img src="https://img.shields.io/codecov/c/github/mattcarlotta/snackables-next?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://github.com/mattcarlotta/snackables-next/blob/master/LICENSE">
-    <img src="https://img.shields.io/npm/l/snackables-next.svg?style=for-the-badge&labelColor=000000">
+    <img src="https://img.shields.io/npm/l/snackables-next?style=for-the-badge&labelColor=000000">
   </a>
   <a href="https://www.npmjs.com/package/snackables-next">
     <img src="https://img.shields.io/npm/dm/snackables-next?style=for-the-badge&labelColor=000000">
