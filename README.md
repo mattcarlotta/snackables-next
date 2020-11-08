@@ -18,7 +18,7 @@
   </a>
 </p>
 
-Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables-next is a simple to use [zero-dependency](https://bundlephobia.com/result?p=snackables-next@) package module that handles parsing, caching, and assigning one or many `.env` files for [NextJS](https://github.com/vercel/next.js).
+Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-expand](https://github.com/motdotla/dotenv-expand), snackables-next is a simplified version of [snackables](https://www.npmjs.com/package/snackables) that handles parsing, caching, and assigning one or many `.env` files for [NextJS](https://github.com/vercel/next.js).
 
 ## Quick Links
 
@@ -45,7 +45,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 [FAQ](#faq)
   - [Should I commit my .env files?](#should-i-commit-my-env-files)
-  - [How does snackables work and will it override already set or predefined variables?](#how-does-snackables-work-and-will-it-override-already-set-or-predefined-variables)
+  - [How does snackables-next work and will it override already set or predefined variables?](#how-does-snackables-next-work-and-will-it-override-already-set-or-predefined-variables)
   - [Why doesn't the parse method automatically assign Envs?](#why-doesnt-the-parse-method-automatically-assign-envs)
 
 [Contributing Guide](#contributing-guide)
@@ -54,21 +54,23 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ## Installation
 
+By default, snackables-next will be compiled with NextJS and will not needed as a project dependency. If you wish to use this package outside of Next, then you can manually install it using one of the following package managers:
+
 ```bash
 # with npm
-npm install snackables
+npm install snackables-next
 
 # or with Yarn
-yarn add snackables
+yarn add snackables-next
 ```
 
 ## Usage
 
-You must `require`/`import` the snackables package as early as possible and invoke the [Config method](#config-method):
+You must `require`/`import` the snackables-next package as early as possible and invoke the [Config method](#config-method):
 
 ```javascript
-require("snackables").config({ paths: ["custom/path/to/.env"] });
-// import { config } from 'snackables';
+require("snackables-next").config({ paths: ["custom/path/to/.env"] });
+// import { config } from 'snackables-next';
 // config({ paths: ["custom/path/to/.env"] });
 
 ```
@@ -78,7 +80,10 @@ require("snackables").config({ paths: ["custom/path/to/.env"] });
 By invoking the config method, it will read your `.env` files, parse the contents, assign them to [`process.env`](https://nodejs.org/docs/latest/api/process.html#process_process_env), and return an `Object` with `parsed`, `extracted` and `cachedEnvFiles` properties (the [cache](#config-cache) argument of `config` **must** be set to true for `cachedEnvFiles` to be utilized):
 
 ```js
-const result = snackables.config();
+const { config } = require("snackables-next");
+// import { config } from "snackables-next";
+
+const result = config();
 
 console.log("parsed", result.parsed); // process.env with loaded Envs
 console.log("extracted", result.extracted); // extracted Envs within a { KEY: VALUE } object
@@ -109,9 +114,9 @@ You may specify a single directory path if your files are located elsewhere.
 A single directory path as a `string`:
 
 ```js
-require("snackables").config({ dir: "path/to/directory" });
+require("snackables-next").config({ dir: "path/to/directory" });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ dir: "path/to/directory" });
 ```
 
@@ -121,21 +126,21 @@ Default: `[".env"]`
 
 You may specify custom paths if your files are located elsewhere (recommended to use **absolute** path(s) from your root directory).
 
-A single file or multiple file paths as an `array` of `string`s:
+A single file path or multiple file paths as an `Array` of `string`s:
 
 ```js
-require("snackables").config({ paths: ["custom/path/to/.env", "custom/path/to/.env.base"] });
+require("snackables-next").config({ paths: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ paths: ["custom/path/to/.env", "custom/path/to/.env.base"] });
 ```
 
-This can also be combined with the [Config dir](#config-dir) argument to simplify custom paths:
+This can also be combined with the [Config dir](#config-dir) argument to simplify loading from a custom path:
 
 ```js
-require("snackables").config({ dir: "custom/path/to", paths: [".env", ".env.base"] });
+require("snackables-next").config({ dir: "custom/path/to", paths: [".env", ".env.base"] });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ dir: "custom/path/to", paths: [".env", ".env.base"] });
 ```
 
@@ -146,9 +151,9 @@ Default: `utf-8`
 You may specify the encoding [type](https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings) of your file containing environment variables.
 
 ```js
-require("snackables").config({ encoding: "latin1" });
+require("snackables-next").config({ encoding: "latin1" });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ encoding: "latin1" });
 ```
 
@@ -156,12 +161,12 @@ require("snackables").config({ encoding: "latin1" });
 
 Default: `false`
 
-You may specify whether or not to temporarily cache `.env` files once they're loaded. This is useful if you're importing snackables multiple times and attempting to load a file more than once. If the cache contains the loaded `.env` file, it will be skipped. This also works for reloading cached files using [parse](#parse-method) if the `process.env` happens to be reset to a default state.
+You may specify whether or not to temporarily cache `.env` files once they're loaded. This is useful if you're importing snackables-next multiple times and attempting to load a file **within the same process**. If the cache contains the loaded `.env` file, it will be skipped. This also works for reloading cached files using [parse](#parse-method) if the `process.env` happens to be reset to a default state.
 
 ```js
-require("snackables").config({ cache: true });
+require("snackables-next").config({ cache: true });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ cache: true });
 ```
 
@@ -173,9 +178,9 @@ Default: `false`
 You may turn on logging to help debug file loading.
 
 ```js
-require("snackables").config({ debug: process.env.DEBUG });
+require("snackables-next").config({ debug: process.env.DEBUG });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ debug: process.env.DEBUG });
 ```
 
@@ -196,9 +201,9 @@ For most use cases, you'll want to pass parse a `string` or `Buffer` as the firs
 
 ```js
 const { readFileSync } = require("fs");
-const { parse } = require("snackables");
+const { parse } = require("snackables-next");
 // import { readFileSync } from "fs";
-// import { parse } from "snackables";
+// import { parse } from "snackables-next";
 
 const config = parse(Buffer.from("BASIC=basic")); // will return an object
 console.log(typeof config, config); // object { BASIC : 'basic' }
@@ -218,8 +223,8 @@ The [cache](#config-cache) argument is set to `true` when the `config` method is
 If the above requirements are met, parse will **reapply** cached Envs properties to `process.env` and return `process.env`. 
 
 ```js
-const { config, parse } = require("snackables");
-// import { config, parse } from "snackables";
+const { config, parse } = require("snackables-next");
+// import { config, parse } from "snackables-next";
 
 // loads ".env.base" and ".env.dev" to process.env and returns an array of cached env objects
 // cachedEnvFiles = [{ path: "path/to/.env", contents: parsed contents as encoded string  }]
@@ -230,7 +235,7 @@ const { cachedEnvFiles } = config({ paths: [".env.base", ".env.dev"], cache: tru
 const reappliedProcessEnv = parse(cachedEnvFiles); 
 console.log(reappliedProcessEnv) 
 
-// this lets snackables know not to reload from cache
+// this lets snackables-next know not to reload from cache
 process.env.LOADED_CACHE = "true"; 
 
 // since process.env.LOADED_CACHE is defined, cache is skipped and process.env is returned as is
@@ -315,16 +320,16 @@ B=$example
 
 No. It's **strongly** recommended not to commit your `.env` files to version control. It should only include environment-specific values such as database passwords or API keys. Your production database should have a different password than your development database.
 
-### How does snackables work and will it override already set or predefined variables?
+### How does snackables-next work and will it override already set or predefined variables?
 
-By default, snackables will look for the `.env.*` file(s) defined within the [Config paths](#config-paths) argument to `config` and append them to `process.env`.
+By default, snackables-next will look for the `.env.*` file(s) defined within the [Config paths](#config-paths) argument to `config` and append them to `process.env`.
 
 For example:
 
 ```js
-require("snackables").config({ paths: [".env.base", ".env.dev"] });
+require("snackables-next").config({ paths: [".env.base", ".env.dev"] });
 
-// import { config } from "snackables"
+// import { config } from "snackables-next"
 // config({ paths: [".env.base", ".env.dev"] });
 ```
 
@@ -344,7 +349,7 @@ HOST=http://localhost
 PORT=3000
 ```
 
-snackables will parse the files and extract the Envs in the order of how they were defined in `paths`. In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to `process.env`.
+snackables-next will parse the files and extract the Envs in the order of how they were defined in `paths`. In the example above, the `DB_PASS` variable within `.env.base` would be overidden by `.env.dev` because `.env.dev` file was imported last and, as a result, its `DB_PASS` will be assigned to `process.env`.
 
 Envs that are **pre-set** or become **defined** within `process.env` **WILL NOT be overidden**. No exceptions.
 
@@ -354,7 +359,7 @@ With the exception of assigning pre-cached Envs (which don't require any Env int
 
 Why?
 
-Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the config's [path](#config-path)s argument. The `config` method expects `parse` to return a single `Object` of `extracted` Envs that will be accumulated with other files' extracted Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them).
+Under the hood, the `config` method utilizes the `parse` method to extract one or multiple `.env` files as it loops over the config's [paths](#config-paths) argument. The `config` method expects `parse` to return a single `Object` of `extracted` Envs that will be accumulated with other files' extracted Envs. The result of these accumulated Envs is then assigned to `process.env` **once** -- this approach has the added benefit of prioritizing Envs without using **any** additional logic since the last set of extracted Envs automatically override any previous Envs (thanks to [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Merging_objects_with_same_properties)). While allowing Envs to be assigned multiple times to `process.env` doesn't appear to be much different in terms of performance, it requires a bit more additional overhead logic to determine which `.env` has priority and whether or not to *conditionally* apply them (including times when you might want to parse Envs, but not neccesarily assign them).
 
 ## Contributing Guide
 
