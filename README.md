@@ -1,4 +1,4 @@
-![snackablesLogo](https://github.com/mattcarlotta/snackables/blob/main/snackablesLogo.png?raw=true)
+![snackablesNextLogo](https://github.com/mattcarlotta/snackables-next/blob/main/snackablesNextLogo.png?raw=true)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/snackables-next">
@@ -192,7 +192,7 @@ src: string | Buffer | CacheEnvFiles,
 
 #### Parse src
 
-For most use cases, you'll want to pass parse a `string` or `Buffer` as the first argument which returns an `extracted` or `sanitized` parsed keys/values as a single `Object` (these will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)). 
+For most use cases, you'll want to pass parse a `string` or `Buffer` as the first argument which returns an `extracted` and parsed keys/values as a single `Object` (these will **NOT** be assigned to `process.env`. [Why not?](#why-doesnt-the-parse-method-automatically-assign-envs)). 
 
 ```js
 const { readFileSync } = require("fs");
