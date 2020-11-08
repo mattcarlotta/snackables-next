@@ -54,7 +54,7 @@ Heavily inspired by [dotenv](https://github.com/motdotla/dotenv) and [dotenv-exp
 
 ## Installation
 
-By default, snackables-next will be compiled with NextJS and will not needed as a project dependency. If you wish to use this package outside of Next, then you can manually install it using one of the following package managers:
+By default, snackables-next will be compiled with NextJS and will not be needed as a project dependency. If you wish to use this package outside of Next, then you can manually install it using one of the following package managers:
 
 ```bash
 # with npm
