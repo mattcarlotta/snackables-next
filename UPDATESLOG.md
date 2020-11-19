@@ -2,6 +2,12 @@
 
 All notable updates to this project will be documented in this file. See [SemVer 2.0](https://semver.org/) for commit guidelines.
 
+## [1.1.1] - 2020-19-11
+
+### Changed
+
+- Reduced build size
+
 ## [1.1.0] - 2020-19-11
 
 ### Changed
