@@ -127,28 +127,32 @@ export function parse(src: string | Buffer | CachedEnvFiles): ParsedEnvs {
     const keyValueArr = keyValues[i].match(/^\s*([\w.-]+)\s*=\s*(.*)?\s*$/);
 
     if (keyValueArr) {
-      // default undefined or missing values to empty string
-      let value = keyValueArr[2] || "";
-      const end = value.length - 1;
-      const isDoubleQuoted = value[0] === '"' && value[end] === '"';
-      const isSingleQuoted = value[0] === "'" && value[end] === "'";
+      const key = keyValueArr[1];
 
-      // if single or double quoted, remove quotes
-      if (isSingleQuoted || isDoubleQuoted) {
-        value = value.substring(1, end);
+      if (!env[key]) {
+        // default undefined or missing values to empty string
+        let value = keyValueArr[2] || "";
+        const end = value.length - 1;
+        const isDoubleQuoted = value[0] === '"' && value[end] === '"';
+        const isSingleQuoted = value[0] === "'" && value[end] === "'";
 
-        // if double quoted, expand newlines
-        if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
-      } else {
-        // remove surrounding whitespace
-        value = value.trim();
+        // if single or double quoted, remove quotes
+        if (isSingleQuoted || isDoubleQuoted) {
+          value = value.substring(1, end);
+
+          // if double quoted, expand newlines
+          if (isDoubleQuoted) value = value.replace(/\\n/g, "\n");
+        } else {
+          // remove surrounding whitespace
+          value = value.trim();
+        }
+
+        // interpolate value from process.env or .env
+        value = interpolate(value);
+
+        // prevents the extracted value from overriding a process.env variable
+        extracted[keyValueArr[1]] = value;
       }
-
-      // interpolate value from process.env or .env
-      value = interpolate(value);
-
-      // prevents the extracted value from overriding a process.env variable
-      if (!env[keyValueArr[1]]) extracted[keyValueArr[1]] = value;
     }
   }
 
